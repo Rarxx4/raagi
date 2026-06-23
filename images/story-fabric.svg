@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+  <rect width="100%" height="100%" fill="#efe7dd"/>
+  <defs>
+    <filter id="fblur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="24"/></filter>
+    <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#d8cbb8"/><stop offset="1" stop-color="#cbbfae"/></linearGradient>
+  </defs>
+  <rect x="24" y="24" width="752" height="752" rx="8" fill="url(#g1)" filter="url(#fblur)"/>
+  <rect x="64" y="120" width="672" height="520" rx="6" fill="#e6ddcf" opacity="0.65"/>
+  <g opacity="0.08">
+    <rect x="64" y="120" width="672" height="520" rx="6" fill="#a89f8f"/>
+  </g>
+  <text x="28" y="760" font-family="Inter, sans-serif" font-size="14" fill="#7b746e">Fabric close-up placeholder</text>
+</svg>
