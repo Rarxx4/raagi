@@ -204,7 +204,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-img {
   position: absolute;
   inset: 0;
-  background: #4a4840 url('/images/hero.svg') center/cover no-repeat;
+  background: #4a4840;
 }
 .hero-overlay {
   position: absolute;
