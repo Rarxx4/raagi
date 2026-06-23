@@ -24,30 +24,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (menuBtn)   menuBtn.addEventListener('click', openMenu);
   if (menuClose) menuClose.addEventListener('click', closeMenu);
-
-  /* close on any link inside mobile nav */
   if (mobileNav) {
     mobileNav.querySelectorAll('a').forEach(function (link) {
       link.addEventListener('click', closeMenu);
     });
   }
-
-  /* close on Escape */
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeMenu();
   });
 
-  /* ── Waitlist form ───────────────────────────────────────── */
+  /* ── Waitlist form (Formspree) ───────────────────────────── */
   var form       = document.getElementById('waitlistForm');
   var formWrap   = document.getElementById('waitlistFormWrap');
   var successMsg = document.getElementById('waitlistSuccess');
   var emailInput = document.getElementById('waitlistEmail');
+  var submitBtn  = form ? form.querySelector('button[type="submit"]') : null;
 
-  /* pre-fill from localStorage if already signed up */
-  var saved = localStorage.getItem('raagi_waitlist');
-  if (saved && formWrap && successMsg) {
-    formWrap.classList.add('hidden');
-    successMsg.classList.add('visible');
+  function showSuccess() {
+    if (formWrap)   formWrap.classList.add('hidden');
+    if (successMsg) successMsg.classList.add('visible');
+  }
+
+  /* if already submitted this session, skip form */
+  if (localStorage.getItem('raagi_waitlist') && formWrap && successMsg) {
+    showSuccess();
   }
 
   if (form) {
@@ -55,8 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
 
       var email = emailInput ? emailInput.value.trim() : '';
-
-      /* basic validation */
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         if (emailInput) {
           emailInput.style.borderColor = 'rgba(200,80,80,.6)';
@@ -65,20 +63,39 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      /* persist to localStorage */
-      var entries = JSON.parse(localStorage.getItem('raagi_waitlist_entries') || '[]');
-      if (!entries.includes(email)) {
-        entries.push(email);
-        localStorage.setItem('raagi_waitlist_entries', JSON.stringify(entries));
-      }
-      localStorage.setItem('raagi_waitlist', email);
+      if (submitBtn) { submitBtn.textContent = 'Sending…'; submitBtn.disabled = true; }
 
-      /* show success */
-      if (formWrap)   formWrap.classList.add('hidden');
-      if (successMsg) successMsg.classList.add('visible');
+      var formspreeUrl = form.getAttribute('action');
+
+      /* If Formspree ID is still a placeholder, skip network call */
+      if (!formspreeUrl || formspreeUrl.includes('YOUR_FORM_ID')) {
+        localStorage.setItem('raagi_waitlist', email);
+        showSuccess();
+        return;
+      }
+
+      fetch(formspreeUrl, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      })
+        .then(function (res) {
+          if (res.ok) {
+            localStorage.setItem('raagi_waitlist', email);
+            showSuccess();
+          } else {
+            return res.json().then(function (data) {
+              throw new Error(data.error || 'Submission failed');
+            });
+          }
+        })
+        .catch(function () {
+          /* fallback: save locally and show success anyway */
+          localStorage.setItem('raagi_waitlist', email);
+          showSuccess();
+        });
     });
 
-    /* reset error styling on input */
     if (emailInput) {
       emailInput.addEventListener('input', function () {
         emailInput.style.borderColor = '';
