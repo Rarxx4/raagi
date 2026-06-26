@@ -103,6 +103,46 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  /* ── Product carousels ───────────────────────────────────── */
+  document.querySelectorAll('[data-carousel]').forEach(function (carousel) {
+    var track   = carousel.querySelector('.carousel-track');
+    var dots    = carousel.querySelectorAll('[data-dot]');
+    var prevBtn = carousel.querySelector('.carousel-prev');
+    var nextBtn = carousel.querySelector('.carousel-next');
+    var labelEl = carousel.querySelector('[data-label]');
+    var labels  = (carousel.getAttribute('data-labels') || '').split(',');
+    var total   = carousel.querySelectorAll('.carousel-slide').length;
+    var current = 0;
+    var startX  = 0;
+
+    function goTo(index) {
+      current = (index % total + total) % total;
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      dots.forEach(function (d, i) { d.classList.toggle('active', i === current); });
+      if (labelEl && labels[current]) labelEl.textContent = labels[current];
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', function (e) { e.stopPropagation(); goTo(current - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function (e) { e.stopPropagation(); goTo(current + 1); });
+
+    dots.forEach(function (dot) {
+      dot.addEventListener('click', function (e) {
+        e.stopPropagation();
+        goTo(parseInt(this.getAttribute('data-dot'), 10));
+      });
+    });
+
+    /* Touch swipe support */
+    carousel.addEventListener('touchstart', function (e) {
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', function (e) {
+      var diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+    }, { passive: true });
+  });
+
   /* ── Smooth scroll for anchor links ─────────────────────── */
   document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
     anchor.addEventListener('click', function (e) {
