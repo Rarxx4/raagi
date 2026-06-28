@@ -200,7 +200,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-img {
   position: absolute;
   inset: 0;
-  background: #4a4840;
+  background: #4a4840 url('/images/hero.jpg') center/cover no-repeat;
 }
 .hero-overlay {
   position: absolute;
@@ -423,7 +423,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .waitlist-bg {
   position: absolute;
   inset: 0;
-  background: var(--charcoal);
+  background: var(--charcoal) url('/images/waitlist-bg.jpg') center/cover no-repeat;
 }
 .waitlist-overlay {
   position: absolute;
