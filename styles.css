@@ -102,25 +102,21 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .nav-logo {
   text-align: center;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  line-height: 1;
+  justify-content: center;
 }
-.nav-logo-text {
-  font-family: var(--font-serif);
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  color: var(--charcoal);
-  line-height: 1;
-  display: flex;
-  align-items: flex-start;
-  gap: 2px;
+.nav-logo-img {
+  height: 52px;
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
-.nav-logo-text sup {
-  font-size: 14px;
-  color: var(--olive-light);
-  margin-top: 2px;
+.footer-logo-img {
+  height: 64px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  margin-bottom: 10px;
 }
 
 /* Mobile hamburger */
@@ -555,22 +551,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   gap: 48px;
   padding-bottom: 52px;
   border-bottom: 1px solid rgba(58,61,46,.10);
-}
-.footer-logo-text {
-  font-family: var(--font-serif);
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--charcoal);
-  letter-spacing: .06em;
-  display: flex;
-  align-items: flex-start;
-  gap: 2px;
-  line-height: 1;
-}
-.footer-logo-text sup {
-  font-size: 11px;
-  color: var(--olive-light);
-  margin-top: 3px;
 }
 .footer-brand-tagline {
   font-size: 12.5px;
